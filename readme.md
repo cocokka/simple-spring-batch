@@ -156,3 +156,17 @@ java -jar target/app.jar --job.name=job2
 
 
 ---
+
+### H2 Database
+This project uses an in-memory H2 database for testing and development purposes. The database configuration is located in `application.properties`:
+
+1. local server
+    ```bash
+    java -jar h2-2.3.232.jar -tcp -web -baseDir "E:/local-db/data"
+    ```
+2. properties file
+    ```properties
+    spring.datasource.url=jdbc:h2:tcp://localhost:9092/E:/local-db/data/batchdb
+    ```
+3. web console: http://localhost:8082
+4. run schema: https://github.com/spring-projects/spring-batch/blob/main/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-h2.sql
