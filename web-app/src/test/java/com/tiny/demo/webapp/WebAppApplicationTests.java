@@ -1,0 +1,14 @@
+package com.tiny.demo.webapp;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class WebAppApplicationTests {
+
+    @Test
+    void contextLoads() {
+        // make sure the application context loads
+    }
+
+}
