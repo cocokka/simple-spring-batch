@@ -1,0 +1,37 @@
+# H2 Database Configuration
+spring:
+  datasource:
+    url: jdbc:h2:mem:batchdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  sql:
+    init:
+      schema-locations: classpath*:schema-h2.sql
+      mode: always
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  batch:
+    job:
+      enabled: false
+
+  # MyBatis Configuration
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod

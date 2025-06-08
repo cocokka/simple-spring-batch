@@ -6,9 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class WebAppApplicationTests {
 
-    @Test
-    void contextLoads() {
-        // make sure the application context loads
-    }
-
+  @Test
+  void contextLoads() {
+    // make sure the application context loads
+  }
 }

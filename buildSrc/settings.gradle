@@ -1,7 +1,6 @@
 pluginManagement {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -15,15 +14,5 @@ dependencyResolutionManagement {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         mavenCentral()
-        google()
-        gradlePluginPortal()
     }
 }
-
-rootProject.name = 'simple-spring-batch'
-
-include("common")
-include("job1")
-include("job2")
-include("app")
-include("web-app")

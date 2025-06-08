@@ -8,9 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AppApplicationTests {
 
-    @Test
-    void contextLoads() {
-        // make sure the context is good.
-    }
-
+  @Test
+  void contextLoads() {
+    // make sure the context is good.
+  }
 }

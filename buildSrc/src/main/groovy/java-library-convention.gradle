@@ -1,0 +1,4 @@
+plugins {
+    id 'java-common-convention'
+    id 'java-library'
+}

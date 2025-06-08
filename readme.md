@@ -2,7 +2,9 @@
 
 ## 📦 1. Project Overview
 
-This is a simple Spring Batch project designed to demonstrate how to configure and run batch jobs using Spring Boot and Spring Batch. The project supports multiple jobs (e.g., `job1`) and allows conditional configuration based on environment properties.
+This is a simple Spring Batch project designed to demonstrate how to configure and run batch jobs using Spring Boot and
+Spring Batch. The project supports multiple jobs (e.g., `job1`) and allows conditional configuration based on
+environment properties.
 
 ---
 
@@ -19,10 +21,8 @@ simple-spring-batch/
 ├── job1/                         # Module for job1
 │   └── src/main/java/
 │       └── com/tiny/demo/job1/
-│           ├── registry/
-│           │   ├── JobRegister.java    # Configuration class defining job1 bean
-│           │   └── EnableJob1.java     # Custom annotation to enable job1
-│           └── ...                       # Step, Reader, Processor, Writer implementations
+│           ├── impl/            # Step, Reader, Processor, Writer implementations
+│           └── JobAuotoConfiguration.java # Job configuration class                      
 │
 └── common/                       # Shared components across jobs
     └── src/main/java/
@@ -31,8 +31,8 @@ simple-spring-batch/
                 └── MetricsJobListener.java  # Reusable metrics listener
 ```
 
-
 ### Key Features:
+
 - **Modular design**: Each job lives in its own module (`job1`, `job2`, etc.)
 - **Conditional loading**: Jobs are only loaded if corresponding property (e.g., `job.name=job1`) is set
 - **Component scanning**: Uses custom annotations and `@ComponentScan` to register beans
@@ -52,17 +52,16 @@ Create a new directory structure like this:
 job2/
 └── src/main/java/
     └── com/tiny/demo/job2/
-        └── registry/
-            ├── JobRegister.java
-            └── EnableJob2.java
+         ├── impl/
+         └── JobAutoConfiguration.java
 ```
-
 
 ### Step 2: Define the Job Configuration
 
-**JobRegister.java**
+**JobAutoConfiguration.java**
+
 ```java
-package com.tiny.demo.job2.registry;
+package com.tiny.demo.job2;
 
 import com.tiny.demo.common.metrics.MetricsJobListener;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -76,9 +75,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(name = "job.name", havingValue = "job2")
-@ComponentScan("com.tiny.demo.job2")
-public class JobRegister {
+@ConditionalOnProperty(name = JOB_NAME, havingValue = "job2")
+@ComponentScan
+public class JobAutoConfiguration {
 
     @Bean
     public Job job2(JobRepository jobRepository, Step step2, MeterRegistry registry) {
@@ -90,54 +89,9 @@ public class JobRegister {
 }
 ```
 
-
-### Step 3: Create a Custom Enable Annotation (Optional)
-
-**EnableJob2.java**
-```java
-package com.tiny.demo.job2.registry;
-
-import org.springframework.context.annotation.Import;
-import java.lang.annotation.*;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Import(JobRegister.class)
-public @interface EnableJob2 {
-}
-```
-
+### Step 3: Add JobAutoConfiguration to imports
 
 ### Step 4: Update Main Application to Include the New Job
-
-In `AppApplication.java`, ensure that the package containing `job2` is scanned:
-
-```java
-@SpringBootApplication
-@ComponentScan(basePackages = {
-    "com.tiny.demo.app",
-    "com.tiny.demo.common",
-    "com.tiny.demo.job1.registry",
-    "com.tiny.demo.job2.registry"
-})
-public class AppApplication {
-    // ...
-}
-```
-
-
-Or use your custom annotation:
-
-```java
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@EnableJob1
-@EnableJob2
-public @interface EnableJobs {
-    // ...
-}
-```
-
 
 ### Step 5: Run the New Job
 
@@ -147,18 +101,18 @@ Run the application with the `job.name` parameter:
 ./mvnw spring-boot:run -Dspring-boot.run.arguments="--job.name=job2"
 ```
 
-
 Or via JAR:
 
 ```bash
 java -jar target/app.jar --job.name=job2
 ```
 
-
 ---
 
 ### H2 Database
-This project uses an in-memory H2 database for testing and development purposes. The database configuration is located in `application.properties`:
+
+This project uses an in-memory H2 database for testing and development purposes. The database configuration is located
+in `application.properties`:
 
 1. local server
     ```bash
@@ -169,4 +123,5 @@ This project uses an in-memory H2 database for testing and development purposes.
     spring.datasource.url=jdbc:h2:tcp://localhost:9092/E:/local-db/data/batchdb
     ```
 3. web console: http://localhost:8082
-4. run schema: https://github.com/spring-projects/spring-batch/blob/main/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-h2.sql
+4. run
+   schema: https://github.com/spring-projects/spring-batch/blob/main/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-h2.sql
